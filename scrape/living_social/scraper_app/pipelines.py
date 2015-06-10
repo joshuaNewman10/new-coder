@@ -1,46 +1,31 @@
-#! -*- coding: utf-8 -*-
-
-"""
-Web Scraper Project
-
-Scrape data from a regularly updated website livingsocial.com and
-save to a database (postgres).
-
-Scrapy pipeline part - stores scraped items in the database.
-"""
-
 from sqlalchemy.orm import sessionmaker
 from models import Deals, db_connect, create_deals_table
 
-
 class LivingSocialPipeline(object):
-    """Livingsocial pipeline for storing scraped items in the database"""
-    def __init__(self):
-        """Initializes database connection and sessionmaker.
+  """LivingSocial pipeline for storing scraped items in database"""
+  def __init__(self):
+    """
+    Initialize database connection and sessionmaker
+    Creates deals table
+    """
+    engine = db_connect()
+    create_deals_table()
+    self.Session = sessionmaker(bind=engine) #binding/connection to db with the defined engine
 
-        Creates deals table.
+  def process_item(self, item, spider):
+    """
+    Save deals in database
 
-        """
-        engine = db_connect()
-        create_deals_table(engine)
-        self.Session = sessionmaker(bind=engine)
-
-    def process_item(self, item, spider):
-        """Save deals in the database.
-
-        This method is called for every item pipeline component.
-
-        """
-        session = self.Session()
-        deal = Deals(**item)
-
-        try:
-            session.add(deal)
-            session.commit()
-        except:
-            session.rollback()
-            raise
-        finally:
-            session.close()
-
-        return item
+    This method called for every item pipeline component
+    """
+    session = Self.Session() #create db session
+    deal = Deals(**item) #get one scraped deal data from Deals model
+    try:
+      session.add(deal) #unpack an item and add to DB
+      session.commit()  #before this the deal is still on the SQLALC level (commit puts it into actual db)
+    except:
+      session.rollback() #dont want to save partial data to db so rollback that whole item
+      raise
+    finally:
+      session.close() #finish with closing the session
+    return item
