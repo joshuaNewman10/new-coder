@@ -7,14 +7,3 @@ class LivingSocialDeal(Item):
     location = Field()
     original_price = Field()
     price = Field()
-    end_date = Field()
-
-
-class LivingSocialDeal2(Item):
-  """Livingsocial container (dict like obj) for scraped data"""
-  title = Field()
-  link = Field()
-  location = Field()
-  original_price = Field()
-  price = Field()
-  end_date = Field()

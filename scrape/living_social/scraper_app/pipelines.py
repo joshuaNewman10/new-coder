@@ -9,7 +9,7 @@ class LivingSocialPipeline(object):
     Creates deals table
     """
     engine = db_connect()
-    create_deals_table()
+    create_deals_table(engine)
     self.Session = sessionmaker(bind=engine) #binding/connection to db with the defined engine
 
   def process_item(self, item, spider):
@@ -18,7 +18,7 @@ class LivingSocialPipeline(object):
 
     This method called for every item pipeline component
     """
-    session = Self.Session() #create db session
+    session = self.Session() #create db session
     deal = Deals(**item) #get one scraped deal data from Deals model
     try:
       session.add(deal) #unpack an item and add to DB

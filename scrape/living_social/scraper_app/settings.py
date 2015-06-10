@@ -11,3 +11,6 @@ DATABASE = {
   'database': 'scrape'
 }
 
+#directiory/module path to LivingSocialPipeline in pipelines.py
+ITEM_PIPELINES = ['scraper_app.pipelines.LivingSocialPipeline']
+

@@ -3,7 +3,7 @@ from scrapy.spider import BaseSpider
 #and gives us ability to select certain parts of response
 from scrapy.selector import HtmlXPathSelector 
 #used to load data into our item_fields
-from srapy.contrib.loader import XPathItemLoader
+from scrapy.contrib.loader import XPathItemLoader
 #MapCompose helps with inputprocessing of the data
 #used to help clean up data we extract
 from scrapy.contrib.loader.processor import  MapCompose
@@ -21,8 +21,8 @@ class LivingSocialSpider(BaseSpider):
   #and assigns them the parse method of the spider as their cb function
   start_urls = ['http://www.livingsocial.com/cities/15-san-francisco'] 
 
-  # if a <ul class= is defined as “unstyled cities-items”, 
-  # then go within that <ul> element to find <li> elements that 
+  # if a ul class is defined as unstyled cities-items, 
+  # then go within that ul element to find li elements that 
   # have a parameter called dealid
   deals_list_xpath = '//li[@dealid]'
   item_fields = {
@@ -31,7 +31,6 @@ class LivingSocialSpider(BaseSpider):
     'location': './/a/div[@class="deal-details"]/p[@class="location"]/text()',
     'original_price': './/a/div[@class="deal-prices"]/div[@class="deal-strikethrough-price"]/div[@class="strikethrough-wrapper"]/text()',
     'price': './/a/div[@class="deal-prices"]/div[@class="deal-price"]/text()',
-    'end_date': './/span[@itemscope]/meta[@itemprop="availabilityEnds"]/@content'
   }
 
   def parse(self, response):
